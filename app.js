@@ -16,23 +16,19 @@ console.log('Server start!');
 
 //createServerの処理
 function getFromClient(request, response){
-    var url_parts = url.parse(request.url);
+
+    var url_parts = url.parse(request.url, true);
     switch (url_parts.pathname) {
 
         case '/':
-            var content = ejs.render(index_page,{
-                title: "Index",
-                content: "これは、テンプレートを使ったサンプルページです。",
-            });
-            response.writeHead(200,{'Content-Type': 'text/html'})
-            response.write(content);
-            response.end();
-            break;
-
-        case '/other':
-            var content = ejs.render(other_page,{
-                title:"Other",
-                content:"これは新しく用意したページです。",
+            var content = "これは、Indexページです。"
+            var query = url_parts.query;
+            if(query.msg != undefined) {
+                content += 'あなたは、「' + query.msg + '」と送りました。';
+            }
+            var content = ejs.render(index_page, {
+                title:"Index",
+                content:content,
             });
             response.writeHead(200,{'Content-Type': 'text/html'});
             response.write(content);
